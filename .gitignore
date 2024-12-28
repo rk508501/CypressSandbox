@@ -1,1 +1,5 @@
 node_modules
+mochawesome-report
+cypress/reports
+cypress/screenshots
+TestReport
