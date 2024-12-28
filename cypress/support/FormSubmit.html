@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form with Loading Spinner</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .spinner {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid lightgray;
+            border-top: 5px solid blue;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Hide the confirmation initially */
+        #confirmation {
+            display: none;
+        }
+    </style>
+</head>
+<body class="container">
+
+    <form id="userForm" class="mt-5">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+    </form>
+
+    <div class="spinner" id="spinner"></div>
+
+    <div id="confirmation" class="mt-3"></div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function submitForm() {
+            const form = document.getElementById('userForm');
+            const spinner = document.getElementById('spinner');
+            const confirmation = document.getElementById('confirmation');
+
+            // Hide the form and display the spinner
+            form.style.display = 'none';
+            spinner.style.display = 'block';
+
+            // Generate a random delay between 1 to 5 seconds
+            const delay = Math.floor(Math.random() * 5000) + 1000;
+
+            setTimeout(() => {
+                // Hide the spinner
+                spinner.style.display = 'none';
+
+                // Generate a unique GUID
+                const guid = generateGUID();
+
+                // Get form data
+                const formData = new FormData(form);
+                const name = formData.get('name');
+                const email = formData.get('email');
+
+                // Display confirmation number and user details
+                confirmation.innerHTML = `
+                    <p>Confirmation Number: ${guid}</p>
+                    <p>Name: ${name}</p>
+                    <p>Email: ${email}</p>
+                `;
+                confirmation.style.display = 'block';
+            }, delay);
+        }
+
+        function generateGUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+    </script>
+
+</body>
+</html>

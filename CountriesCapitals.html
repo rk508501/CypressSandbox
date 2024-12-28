@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countries and Capitals</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        .action-column {
+            display: none;
+        }
+        .show-actions .action-column {
+            display: table-cell;
+        }
+        .loading {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Countries and Capitals</h1>
+        <div class="mb-3">
+            <input type="search" class="form-control" id="search" placeholder="Search countries...">
+        </div>
+        <div class="loading" id="loading" style="display: none;">Loading...</div>
+        <table class="table table-striped" id="countries-table">
+            <thead>
+                <tr>
+                    <th>Country</th>
+                    <th>Capital</th>
+                    <th class="action-column">Action</th>
+                </tr>
+            </thead>
+            <tbody id="countries">
+                <!-- countries and capitals data will be rendered here -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal for editing -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Country and Capital</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-form">
+                        <div class="mb-3">
+                            <label for="country-name" class="form-label">Country Name:</label>
+                            <input type="text" class="form-control" id="country-name" name="country-name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="capital-name" class="form-label">Capital Name:</label>
+                            <input type="text" class="form-control" id="capital-name" name="capital-name">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save-changes">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+    <script>
+        const sampleData = [
+            { country: 'USA', capital: 'Washington D.C.' },
+            { country: 'Canada', capital: 'Ottawa' },
+            { country: 'Mexico', capital: 'Mexico City' },
+            { country: 'United Kingdom', capital: 'London' },
+            { country: 'Germany', capital: 'Berlin' },
+            { country: 'France', capital: 'Paris' },
+            { country: 'Australia', capital: 'Canberra' },
+            { country: 'China', capital: 'Beijing' },
+            { country: 'Japan', capital: 'Tokyo' },
+            { country: 'India', capital: 'New Delhi' },
+        ];
+
+        const countriesElement = document.getElementById('countries');
+        const loadingElement = document.getElementById('loading');
+        const searchInput = document.getElementById('search');
+        const editModal = document.getElementById('editModal');
+        const editForm = document.getElementById('edit-form');
+        const saveChangesButton = document.getElementById('save-changes');
+        const countriesTable = document.getElementById('countries-table');
+
+        let allData = [];
+        let filteredData = [];
+        let currentIndex = -1;
+
+        function renderData(data, showActions) {
+            countriesElement.innerHTML = '';
+            data.forEach((country, index) => {
+                const row = document.createElement('tr');
+                let html = `
+                    <td>${country.name.common}</td>
+                    <td>${country.capital ? country.capital[0] : 'N/A'}</td>
+                `;
+                if (showActions) {
+                    html += `
+                        <td class="action-column">
+                            <button class="btn btn-primary edit-button" data-index="${index}">Edit</button>
+                            <button class="btn btn-danger delete-button" data-index="${index}">Delete</button>
+                        </td>
+                    `;
+                } else {
+                    html += `
+                        <td class="action-column"></td>
+                    `;
+                }
+                row.innerHTML = html;
+                countriesElement.appendChild(row);
+            });
+        }
+
+        fetch('https://restcountries.com/v3.1/all')
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('Failed to fetch data');
+            }
+        })
+        .then(data => {
+            allData = data;
+            loadingElement.style.display = 'none';
+            renderData(data, false);
+        })
+        .catch(error => {
+            console.error(error);
+            loadingElement.style.display = 'none';
+            renderData(sampleData.map(country => ({ name: { common: country.country }, capital: [country.capital] })), false);
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const searchValue = e.target.value.toLowerCase();
+            if (searchValue) {
+                countriesTable.classList.add('show-actions');
+            } else {
+                countriesTable.classList.remove('show-actions');
+            }
+            if (allData.length > 0) {
+                filteredData = allData.filter(country => country.name.common.toLowerCase().includes(searchValue) || (country.capital && country.capital[0].toLowerCase().includes(searchValue)));
+                renderData(filteredData, true);
+            } else {
+                filteredData = sampleData.filter(country => country.country.toLowerCase().includes(searchValue) || country.capital.toLowerCase().includes(searchValue));
+                renderData(filteredData.map(country => ({ name: { common: country.country }, capital: [country.capital] })), true);
+            }
+            const deleteButtons = document.querySelectorAll('.delete-button');
+            const editButtons = document.querySelectorAll('.edit-button');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = button.getAttribute('data-index');
+                    filteredData.splice(index, 1);
+                    renderData(filteredData, true);
+                });
+            });
+            editButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const index = button.getAttribute('data-index');
+                    const country = filteredData[index];
+                    editForm.querySelector('#country-name').value = country.name.common;
+                    editForm.querySelector('#capital-name').value = country.capital ? country.capital[0] : '';
+                    currentIndex = index;
+                    const modal = new bootstrap.Modal(editModal);
+                    modal.show();
+                });
+            });
+        });
+
+        saveChangesButton.addEventListener('click', (e) => {
+            const newCountryName = editForm.querySelector('#country-name').value;
+            const newCapitalName = editForm.querySelector('#capital-name').value;
+            if (currentIndex >= 0 && currentIndex < filteredData.length) {
+                filteredData[currentIndex].name.common = newCountryName;
+                if (newCapitalName) {
+                    filteredData[currentIndex].capital = [newCapitalName];
+                } else {
+                    filteredData[currentIndex].capital = undefined;
+                }
+                renderData(filteredData, true);
+            }
+            const modal = bootstrap.Modal.getInstance(editModal);
+            modal.hide();
+        });
+
+        loadingElement.style.display = 'block';
+    </script>
+</body>
+</html>
