@@ -18,7 +18,7 @@ jobs:
         run: npm install
 
       - name: Run Batch 1 tests
-        run: npm run test -- --spec 'cypress/e2e/regression/actions.cy.js,cypress/e2e/regression/aliasing.cy.js,cypress/e2e/regression/assertions.cy.js,cypress/e2e/regression/connectors.cy.js,cypress/e2e/regression/cookies.cy.js,cypress/e2e/regression/cypress_api.cy.js,cypress/e2e/regression/files.cy.js,cypress/e2e/regression/location.cy.js'
+        run: npx cypress run --spec 'cypress/e2e/regression/actions.cy.js,cypress/e2e/regression/aliasing.cy.js,cypress/e2e/regression/assertions.cy.js,cypress/e2e/regression/connectors.cy.js,cypress/e2e/regression/cookies.cy.js,cypress/e2e/regression/cypress_api.cy.js,cypress/e2e/regression/files.cy.js,cypress/e2e/regression/location.cy.js'
 
   batch2:
     runs-on: ubuntu-latest
@@ -35,7 +35,7 @@ jobs:
         run: npm install
 
       - name: Run Batch 2 tests
-        run: npm run test -- --spec 'cypress/e2e/regression/misc.cy.js,cypress/e2e/regression/navigation.cy.js,cypress/e2e/regression/network_requests.cy.js,cypress/e2e/regression/querying.cy.js,cypress/e2e/regression/spies_stubs_clocks.cy.js,cypress/e2e/regression/storage.cy.js,cypress/e2e/regression/traversal.cy.js,cypress/e2e/regression/utilities.cy.js'
+        run: npx cypress run --spec 'cypress/e2e/regression/misc.cy.js,cypress/e2e/regression/navigation.cy.js,cypress/e2e/regression/network_requests.cy.js,cypress/e2e/regression/querying.cy.js,cypress/e2e/regression/spies_stubs_clocks.cy.js,cypress/e2e/regression/storage.cy.js,cypress/e2e/regression/traversal.cy.js,cypress/e2e/regression/utilities.cy.js'
 
   batch3:
     runs-on: ubuntu-latest
@@ -52,4 +52,4 @@ jobs:
         run: npm install
 
       - name: Run Batch 3 tests
-        run: npm run test -- --spec 'cypress/e2e/regression/viewport.cy.js,cypress/e2e/regression/waiting.cy.js,cypress/e2e/regression/window.cy.js,cypress/e2e/smoke/LoopingObjects.cy.js,cypress/e2e/smoke/MatchingWords.cy.js,cypress/e2e/smoke/ResponseIntercept.cy.js'
+        run: npx cypress run --spec 'cypress/e2e/regression/viewport.cy.js,cypress/e2e/regression/waiting.cy.js,cypress/e2e/regression/window.cy.js,cypress/e2e/smoke/LoopingObjects.cy.js,cypress/e2e/smoke/MatchingWords.cy.js,cypress/e2e/smoke/ResponseIntercept.cy.js'
