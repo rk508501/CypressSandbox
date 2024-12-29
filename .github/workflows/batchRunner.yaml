@@ -1,4 +1,4 @@
-name: Cypress Batch Runner
+name: Cypress Batch Run
 
 on: [push, pull_request]
 
