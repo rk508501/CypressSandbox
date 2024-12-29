@@ -129,3 +129,11 @@ jobs:
             --inline true \
             --charts true \
             --overwrite true
+
+      - name: Upload HTML Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-html-report
+          path: cypress/reports/mocha/merged-report.html
+          retention-days: 30
