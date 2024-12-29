@@ -2,40 +2,61 @@ name: Cypress Batch Runner
 
 on: [push, pull_request]
 
+
 jobs:
   batch1:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install Dependencies
+        run: |
+          npm install
+          npm install -g mochawesome-merge mochawesome-report-generator
+
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch1
 
       - name: Run Batch 1 tests
-        run: npx cypress run --spec 'cypress/e2e/regression/actions.cy.js,cypress/e2e/regression/aliasing.cy.js,cypress/e2e/regression/assertions.cy.js,cypress/e2e/regression/connectors.cy.js,cypress/e2e/regression/cookies.cy.js,cypress/e2e/regression/cypress_api.cy.js,cypress/e2e/regression/files.cy.js,cypress/e2e/regression/location.cy.js'
+        run: npx cypress run --spec 'cypress/e2e/smoke/API.cy.js,cypress/e2e/smoke/Basics.cy.js,cypress/e2e/smoke/CustomCommands.cy.js' --reporter mochawesome --reporter-options reportDir=cypress/reports/mocha/batch1,overwrite=false,html=false,json=true
 
-  batch2:
+      - name: Upload Batch 1 Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: batch1-reports
+          path: cypress/reports/mocha/batch1
+   batch2:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Setup Node
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install Dependencies
+        run: |
+          npm install
+          npm install -g mochawesome-merge mochawesome-report-generator
+
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch1
 
       - name: Run Batch 2 tests
         run: npx cypress run --spec 'cypress/e2e/smoke/LoopingObjects.cy.js,cypress/e2e/smoke/MatchingWords.cy.js,cypress/e2e/smoke/ResponseIntercept.cy.js'
+      - name: Upload Batch 2 Reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: batch1-reports
+          path: cypress/reports/mocha/batch1
 
   merge-reports:
     runs-on: ubuntu-latest
@@ -44,23 +65,32 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install -g mochawesome-merge mochawesome-report-generator
 
-      - name: Merge mochawesome JSON reports
-        run: npx mochawesome-merge cypress/reports/mocha/*.json > cypress/reports/mocha/merged-report.json
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha
+
+      - name: Run Cypress tests
+        run: cypress run --reporter mochawesome --reporter-options reportDir=cypress/reports/mocha,overwrite=false,html=false,json=true
+
+      - name: Merge JSON reports
+        run: mochawesome-merge "cypress/reports/mocha/*.json" > cypress/reports/mocha/merged-report.json
 
       - name: Generate HTML report
-        run: npx marge cypress/reports/mocha/merged-report.json --reportDir cypress/reports/mocha --reportFilename merged-report
+        run: marge cypress/reports/mocha/merged-report.json --reportDir cypress/reports/mocha --reportFilename merged-report
 
-      - name: Upload HTML report
+      - name: Upload report artifacts
         uses: actions/upload-artifact@v3
         with:
           name: mochawesome-report
-          path: cypress/reports/mocha/merged-report.html
+          path: |
+            cypress/reports/mocha/merged-report.html
+            cypress/reports/mocha/merged-report.json
