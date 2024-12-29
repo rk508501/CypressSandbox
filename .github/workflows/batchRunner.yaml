@@ -101,19 +101,31 @@ jobs:
 
       - name: Merge JSON reports
         run: |
-          mochawesome-merge "cypress/reports/mocha/**/*.json" > cypress/reports/mocha/merged-report.json
+          # Ensure directory exists
+          mkdir -p cypress/reports/mocha
+          
+          # Debug: List all json files
+          echo "Available report files:"
+          find cypress/reports/mocha -name "*.json" -type f
+          
+          # Create empty array if no reports exist
+          echo "[]" > cypress/reports/mocha/merged-report.json
+          
+          # Merge reports with error handling
+          if find cypress/reports/mocha -name "*.json" -type f | grep -q .; then
+            mochawesome-merge "cypress/reports/mocha/**/mochawesome*.json" > cypress/reports/mocha/merged-report.json || echo "[]" > cypress/reports/mocha/merged-report.json
+          fi
+          
+          # Verify merged file
+          echo "Merged report content:"
+          cat cypress/reports/mocha/merged-report.json
 
       - name: Generate HTML report
+        if: always()
         run: |
           marge cypress/reports/mocha/merged-report.json \
             --reportDir cypress/reports/mocha \
             --reportFilename merged-report \
-            --charts true
-
-      - name: Upload merged reports
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: cypress-test-report
-          path: cypress/reports/mocha
-          retention-days: 30
+            --inline true \
+            --charts true \
+            --overwrite true
