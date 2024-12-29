@@ -22,20 +22,6 @@ function parseMochaReports() {
     return result;
 }
 
-const parsedResults = parseMochaReports();
-console.log(parsedResults);
-
-const numberOfBatches = 3;
-const batches = createBatches(parsedResults, numberOfBatches);
-console.log(batches);
-
-// Calculate and log batch durations
-batches.forEach((batch, index) => {
-    const totalDuration = batch.reduce((sum, spec) => sum + spec.duration, 0);
-    console.log(`Batch ${index + 1}: Total Duration = ${totalDuration} ms`);
-    console.table(batch);
-});
-
 function createBatches(specs, numberOfBatches) {
     // Sort specs by duration in descending order
     specs.sort((a, b) => b.duration - a.duration);
@@ -57,3 +43,14 @@ function createBatches(specs, numberOfBatches) {
 
     return batches;
 }
+
+const parsedResults = parseMochaReports();
+const numberOfBatches = 3;
+const batches = createBatches(parsedResults, numberOfBatches);
+
+// Calculate and log batch durations
+batches.forEach((batch, index) => {
+    const totalDuration = batch.reduce((sum, spec) => sum + spec.duration, 0);
+    console.log(`Batch ${index + 1}: Total Duration = ${totalDuration} ms`);
+    console.table(batch);
+});

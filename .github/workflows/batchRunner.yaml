@@ -35,10 +35,11 @@ jobs:
         run: npm install
 
       - name: Run Batch 2 tests
-        run: npx cypress run --spec 'cypress/e2e/regression/misc.cy.js,cypress/e2e/regression/navigation.cy.js,cypress/e2e/regression/network_requests.cy.js,cypress/e2e/regression/querying.cy.js,cypress/e2e/regression/spies_stubs_clocks.cy.js,cypress/e2e/regression/storage.cy.js,cypress/e2e/regression/traversal.cy.js,cypress/e2e/regression/utilities.cy.js'
+        run: npx cypress run --spec 'cypress/e2e/smoke/LoopingObjects.cy.js,cypress/e2e/smoke/MatchingWords.cy.js,cypress/e2e/smoke/ResponseIntercept.cy.js'
 
-  batch3:
+  merge-reports:
     runs-on: ubuntu-latest
+    needs: [batch1, batch2]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -51,5 +52,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Batch 3 tests
-        run: npx cypress run --spec 'cypress/e2e/regression/viewport.cy.js,cypress/e2e/regression/waiting.cy.js,cypress/e2e/regression/window.cy.js,cypress/e2e/smoke/LoopingObjects.cy.js,cypress/e2e/smoke/MatchingWords.cy.js,cypress/e2e/smoke/ResponseIntercept.cy.js'
+      - name: Merge mochawesome JSON reports
+        run: npx mochawesome-merge cypress/reports/mocha/*.json > cypress/reports/mocha/merged-report.json
+
+      - name: Generate HTML report
+        run: npx marge cypress/reports/mocha/merged-report.json --reportDir cypress/reports/mocha --reportFilename merged-report
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v2
+        with:
+          name: mochawesome-report
+          path: cypress/reports/mocha/merged-report.html
