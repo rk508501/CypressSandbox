@@ -11,7 +11,7 @@ function parseMochaReports() {
         if (file.endsWith('.json')) {
             const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-            //Add to result
+            // Add to result
             result.push({
                 duration: data.stats.duration,
                 file: data.results[0].file
@@ -28,17 +28,21 @@ function createBatches(specs, numberOfBatches) {
 
     // Initialize batches
     const batches = Array.from({ length: numberOfBatches }, () => []);
+    const addedSpecs = new Set();
 
     // Distribute specs into batches
     specs.forEach(spec => {
-        // Find the batch with the smallest total duration
-        let smallestBatch = batches.reduce((prev, curr) => {
-            return prev.reduce((sum, spec) => sum + spec.duration, 0) <
-                   curr.reduce((sum, spec) => sum + spec.duration, 0) ? prev : curr;
-        });
+        if (!addedSpecs.has(spec.file)) {
+            // Find the batch with the smallest total duration
+            let smallestBatch = batches.reduce((prev, curr) => {
+                return prev.reduce((sum, spec) => sum + spec.duration, 0) <
+                       curr.reduce((sum, spec) => sum + spec.duration, 0) ? prev : curr;
+            });
 
-        // Add the spec to the smallest batch
-        smallestBatch.push(spec);
+            // Add the spec to the smallest batch
+            smallestBatch.push(spec);
+            addedSpecs.add(spec.file);
+        }
     });
 
     return batches;

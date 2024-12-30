@@ -153,8 +153,8 @@ jobs:
           fi
           
           # Verify merged file
-          echo "Merged report content:"
-          cat cypress/reports/mocha/merged-report.json
+          #echo "Merged report content:"
+          #cat cypress/reports/mocha/merged-report.json
 
       - name: Generate HTML report
         if: always()
