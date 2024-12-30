@@ -6,6 +6,9 @@ jobs:
   batch1:
     runs-on: ubuntu-latest
     steps:
+      - name: Echo REPO_SECRET
+        run: echo ${{ secrets.REPO_SECRET }}
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -42,6 +45,9 @@ jobs:
   batch2:
     runs-on: ubuntu-latest
     steps:
+      - name: Echo REPO_SECRET
+        run: echo ${{ secrets.REPO_SECRET }}
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -78,6 +84,9 @@ jobs:
   batch3:
     runs-on: ubuntu-latest
     steps:
+      - name: Echo REPO_SECRET
+        run: echo ${{ secrets.REPO_SECRET }}
+
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -116,6 +125,9 @@ jobs:
     needs: [batch1, batch2, batch3]
     if: always()
     steps:
+      - name: Echo REPO_SECRET
+        run: echo ${{ secrets.REPO_SECRET }}
+
       - name: Checkout
         uses: actions/checkout@v3
 
