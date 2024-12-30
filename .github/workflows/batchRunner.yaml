@@ -26,7 +26,7 @@ jobs:
       - name: Run Batch 1 tests
         run: |
           npx cypress run \
-            --spec "cypress/e2e/regression/actions.cy.js" \
+            --spec "cypress/e2e/regression/actions.cy.js,cypress/e2e/regression/aliasing.cy.js,cypress/e2e/regression/assertions.cy.js,cypress/e2e/regression/connectors.cy.js,cypress/e2e/regression/cookies.cy.js,cypress/e2e/regression/cypress_api.cy.js,cypress/e2e/regression/files.cy.js,cypress/e2e/regression/location.cy.js" \
             --reporter mochawesome \
             --reporter-options reportDir=cypress/reports/mocha/batch1,overwrite=false,html=false,json=true
         continue-on-error: true
@@ -62,7 +62,7 @@ jobs:
       - name: Run Batch 2 tests
         run: |
           npx cypress run \
-            --spec "cypress/e2e/regression/cypress_api.cy.js" \
+            --spec "cypress/e2e/regression/misc.cy.js,cypress/e2e/regression/navigation.cy.js,cypress/e2e/regression/network_requests.cy.js,cypress/e2e/regression/querying.cy.js,cypress/e2e/regression/spies_stubs_clocks.cy.js,cypress/e2e/regression/storage.cy.js,cypress/e2e/regression/traversal.cy.js,cypress/e2e/regression/utilities.cy.js" \
             --reporter mochawesome \
             --reporter-options reportDir=cypress/reports/mocha/batch2,overwrite=false,html=false,json=true
         continue-on-error: true
@@ -75,9 +75,45 @@ jobs:
           path: cypress/reports/mocha/batch2
           retention-days: 30
 
+  batch3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: |
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch3
+
+      - name: Run Batch 3 tests
+        run: |
+          npx cypress run \
+            --spec "cypress/e2e/regression/viewport.cy.js,cypress/e2e/regression/waiting.cy.js,cypress/e2e/regression/window.cy.js,cypress/e2e/smoke/LoopingObjects.cy.js,cypress/e2e/smoke/MatchingWords.cy.js,cypress/e2e/smoke/ResponseIntercept.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch3,overwrite=false,html=false,json=true
+        continue-on-error: true
+
+      - name: Upload Batch 3 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch3-reports
+          path: cypress/reports/mocha/batch3
+          retention-days: 30
+
   merge-reports:
     runs-on: ubuntu-latest
-    needs: [batch1, batch2]
+    needs: [batch1, batch2, batch3]
     if: always()
     steps:
       - name: Checkout

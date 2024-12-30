@@ -12,7 +12,7 @@ function getAllFiles(dirPath, arrayOfFiles) {
     if (fs.statSync(path.join(dirPath, file)).isDirectory()) {
       arrayOfFiles = getAllFiles(path.join(dirPath, file), arrayOfFiles);
     } else if (file.endsWith('.cy.js')) {
-      arrayOfFiles.push(path.join(dirPath, file));
+      arrayOfFiles.push(path.relative(__dirname, path.join(dirPath, file)));
     }
   });
 
