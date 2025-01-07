@@ -1,36 +1,31 @@
 name: Cypress Batch Run
-
-on: [push, pull_request]
-
+"on":
+  - push
+  - pull_request
 jobs:
   batch1:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
-
+          node-version: "18"
+          cache: npm
       - name: Install Dependencies
-        run: |
+        run: |-
           npm ci
           npm install -g mochawesome-merge mochawesome-report-generator
-
       - name: Create reports directory
         run: mkdir -p cypress/reports/mocha/batch1
-
       - name: Run Batch 1 tests
-        run: |
+        run: |-
           npx cypress run \
-            --spec "cypress/e2e/regression/actions.cy.js,cypress/e2e/regression/aliasing.cy.js,cypress/e2e/regression/assertions.cy.js,cypress/e2e/regression/connectors.cy.js,cypress/e2e/regression/cookies.cy.js,cypress/e2e/regression/cypress_api.cy.js,cypress/e2e/regression/files.cy.js,cypress/e2e/regression/location.cy.js" \
+            --spec "cypress/e2e/regression/actions.cy.js" \
             --reporter mochawesome \
             --reporter-options reportDir=cypress/reports/mocha/batch1,overwrite=false,html=false,json=true
         continue-on-error: true
-
       - name: Upload Batch 1 Reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -38,35 +33,29 @@ jobs:
           name: batch1-reports
           path: cypress/reports/mocha/batch1
           retention-days: 30
-
   batch2:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
-
+          node-version: "18"
+          cache: npm
       - name: Install Dependencies
-        run: |
+        run: |-
           npm ci
           npm install -g mochawesome-merge mochawesome-report-generator
-
       - name: Create reports directory
         run: mkdir -p cypress/reports/mocha/batch2
-
       - name: Run Batch 2 tests
-        run: |
+        run: |-
           npx cypress run \
-            --spec "cypress/e2e/regression/misc.cy.js,cypress/e2e/regression/navigation.cy.js,cypress/e2e/regression/network_requests.cy.js,cypress/e2e/regression/querying.cy.js,cypress/e2e/regression/spies_stubs_clocks.cy.js,cypress/e2e/regression/storage.cy.js,cypress/e2e/regression/traversal.cy.js,cypress/e2e/regression/utilities.cy.js" \
+            --spec "cypress/e2e/regression/aliasing.cy.js" \
             --reporter mochawesome \
             --reporter-options reportDir=cypress/reports/mocha/batch2,overwrite=false,html=false,json=true
         continue-on-error: true
-
       - name: Upload Batch 2 Reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -74,35 +63,29 @@ jobs:
           name: batch2-reports
           path: cypress/reports/mocha/batch2
           retention-days: 30
-
   batch3:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
-
+          node-version: "18"
+          cache: npm
       - name: Install Dependencies
-        run: |
+        run: |-
           npm ci
           npm install -g mochawesome-merge mochawesome-report-generator
-
       - name: Create reports directory
         run: mkdir -p cypress/reports/mocha/batch3
-
       - name: Run Batch 3 tests
-        run: |
+        run: |-
           npx cypress run \
-            --spec "cypress/e2e/regression/viewport.cy.js,cypress/e2e/regression/waiting.cy.js,cypress/e2e/regression/window.cy.js,cypress/e2e/smoke/LoopingObjects.cy.js,cypress/e2e/smoke/MatchingWords.cy.js,cypress/e2e/smoke/ResponseIntercept.cy.js" \
+            --spec "cypress/e2e/regression/assertions.cy.js" \
             --reporter mochawesome \
             --reporter-options reportDir=cypress/reports/mocha/batch3,overwrite=false,html=false,json=true
         continue-on-error: true
-
       - name: Upload Batch 3 Reports
         if: always()
         uses: actions/upload-artifact@v3
@@ -110,62 +93,643 @@ jobs:
           name: batch3-reports
           path: cypress/reports/mocha/batch3
           retention-days: 30
-
+  batch4:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch4
+      - name: Run Batch 4 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/connectors.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch4,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 4 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch4-reports
+          path: cypress/reports/mocha/batch4
+          retention-days: 30
+  batch5:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch5
+      - name: Run Batch 5 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/cookies.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch5,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 5 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch5-reports
+          path: cypress/reports/mocha/batch5
+          retention-days: 30
+  batch6:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch6
+      - name: Run Batch 6 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/cypress_api.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch6,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 6 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch6-reports
+          path: cypress/reports/mocha/batch6
+          retention-days: 30
+  batch7:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch7
+      - name: Run Batch 7 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/files.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch7,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 7 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch7-reports
+          path: cypress/reports/mocha/batch7
+          retention-days: 30
+  batch8:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch8
+      - name: Run Batch 8 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/location.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch8,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 8 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch8-reports
+          path: cypress/reports/mocha/batch8
+          retention-days: 30
+  batch9:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch9
+      - name: Run Batch 9 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/misc.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch9,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 9 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch9-reports
+          path: cypress/reports/mocha/batch9
+          retention-days: 30
+  batch10:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch10
+      - name: Run Batch 10 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/navigation.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch10,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 10 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch10-reports
+          path: cypress/reports/mocha/batch10
+          retention-days: 30
+  batch11:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch11
+      - name: Run Batch 11 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/network_requests.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch11,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 11 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch11-reports
+          path: cypress/reports/mocha/batch11
+          retention-days: 30
+  batch12:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch12
+      - name: Run Batch 12 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/querying.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch12,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 12 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch12-reports
+          path: cypress/reports/mocha/batch12
+          retention-days: 30
+  batch13:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch13
+      - name: Run Batch 13 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/spies_stubs_clocks.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch13,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 13 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch13-reports
+          path: cypress/reports/mocha/batch13
+          retention-days: 30
+  batch14:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch14
+      - name: Run Batch 14 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/storage.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch14,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 14 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch14-reports
+          path: cypress/reports/mocha/batch14
+          retention-days: 30
+  batch15:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch15
+      - name: Run Batch 15 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/traversal.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch15,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 15 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch15-reports
+          path: cypress/reports/mocha/batch15
+          retention-days: 30
+  batch16:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch16
+      - name: Run Batch 16 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/utilities.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch16,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 16 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch16-reports
+          path: cypress/reports/mocha/batch16
+          retention-days: 30
+  batch17:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch17
+      - name: Run Batch 17 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/viewport.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch17,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 17 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch17-reports
+          path: cypress/reports/mocha/batch17
+          retention-days: 30
+  batch18:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch18
+      - name: Run Batch 18 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/waiting.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch18,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 18 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch18-reports
+          path: cypress/reports/mocha/batch18
+          retention-days: 30
+  batch19:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch19
+      - name: Run Batch 19 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/regression/window.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch19,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 19 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch19-reports
+          path: cypress/reports/mocha/batch19
+          retention-days: 30
+  batch20:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch20
+      - name: Run Batch 20 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/smoke/LoopingObjects.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch20,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 20 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch20-reports
+          path: cypress/reports/mocha/batch20
+          retention-days: 30
+  batch21:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch21
+      - name: Run Batch 21 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/smoke/MatchingWords.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch21,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 21 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch21-reports
+          path: cypress/reports/mocha/batch21
+          retention-days: 30
+  batch22:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: npm
+      - name: Install Dependencies
+        run: |-
+          npm ci
+          npm install -g mochawesome-merge mochawesome-report-generator
+      - name: Create reports directory
+        run: mkdir -p cypress/reports/mocha/batch22
+      - name: Run Batch 22 tests
+        run: |-
+          npx cypress run \
+            --spec "cypress/e2e/smoke/ResponseIntercept.cy.js" \
+            --reporter mochawesome \
+            --reporter-options reportDir=cypress/reports/mocha/batch22,overwrite=false,html=false,json=true
+        continue-on-error: true
+      - name: Upload Batch 22 Reports
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: batch22-reports
+          path: cypress/reports/mocha/batch22
+          retention-days: 30
   merge-reports:
     runs-on: ubuntu-latest
-    needs: [batch1, batch2, batch3]
+    needs:
+      - batch1
+      - batch2
+      - batch3
+      - batch4
+      - batch5
+      - batch6
+      - batch7
+      - batch8
+      - batch9
+      - batch10
+      - batch11
+      - batch12
+      - batch13
+      - batch14
+      - batch15
+      - batch16
+      - batch17
+      - batch18
+      - batch19
+      - batch20
+      - batch21
+      - batch22
     if: always()
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
-          cache: 'npm'
-
+          node-version: "18"
+          cache: npm
       - name: Download all artifacts
         uses: actions/download-artifact@v3
         with:
           path: cypress/reports/mocha
-
       - name: Install dependencies
-        run: |
+        run: |-
           npm ci
           npm install -g mochawesome-merge mochawesome-report-generator
-
       - name: Merge JSON reports
-        run: |
+        run: |-
           # Ensure directory exists
           mkdir -p cypress/reports/mocha
-          
+
           # Debug: List all json files
           echo "Available report files:"
           find cypress/reports/mocha -name "*.json" -type f
-          
+
           # Create empty array if no reports exist
           echo "[]" > cypress/reports/mocha/merged-report.json
-          
+
           # Merge reports with error handling
           if find cypress/reports/mocha -name "*.json" -type f | grep -q .; then
             mochawesome-merge "cypress/reports/mocha/**/mochawesome*.json" > cypress/reports/mocha/merged-report.json || echo "[]" > cypress/reports/mocha/merged-report.json
           fi
-          
-          # Verify merged file
-          #echo "Merged report content:"
-          #cat cypress/reports/mocha/merged-report.json
-
       - name: Generate HTML report
         if: always()
-        run: |
+        run: |-
           marge cypress/reports/mocha/merged-report.json \
             --reportDir cypress/reports/mocha \
             --reportFilename merged-report \
             --inline true \
             --charts true \
             --overwrite true
-
       - name: Upload HTML Report
         if: always()
         uses: actions/upload-artifact@v3
