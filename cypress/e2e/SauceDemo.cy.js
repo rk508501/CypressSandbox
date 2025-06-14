@@ -1,17 +1,5 @@
 it("country capital function", () => {
   cy.visit("https://www.whereig.com/world-countries-and-capitals/");
-  //   cy.contains("div.resp-tableizer > table > tbody > tr", "India")
-  //     .invoke("index")
-  //     .then((index) => {
-  //       cy.log(index);
-  //       cy.get(
-  //         "div.resp-tableizer > table > tbody > tr:nth-child(" +
-  //           (index+1) +
-  //           ") > td:nth-child(3)"
-  //       ).then((capitalElement) => {
-  //         cy.log(capitalElement.text())
-  //       });
-  //     });
 
    getCountryCapital("India").then(capital =>{
     expect(capital.trim()).to.deep.equal('New Delhi')
