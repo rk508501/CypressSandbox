@@ -3,8 +3,32 @@ const XLSX = require("xlsx");
 
 module.exports = defineConfig({
   e2e: {
-    defaultCommandTimeout:3000,
+    defaultCommandTimeout: 3000,
     reporter: 'mochawesome',
+    // Block common advertising and tracking domains
+    blockHosts: [
+      "doubleclick.net",
+      "www.doubleclick.net",
+      "ad.doubleclick.net",
+      "googleadservices.com",
+      "www.googleadservices.com",
+      "googlesyndication.com",
+      "www.googlesyndication.com",
+      "google-analytics.com",
+      "www.google-analytics.com",
+      "analytics.google.com",
+      "ads.google.com",
+      "adservice.google.com",
+      "pagead2.googlesyndication.com",
+      "adnxs.com",
+      "www.adnxs.com",
+      "advertising.com",
+      "www.advertising.com",
+      "scorecardresearch.com",
+      "sb.scorecardresearch.com",
+      "facebook.com",
+      "pixel.facebook.com"
+    ],
     reporterOptions: {
       reportDir: 'cypress/reports/mochawesome',
       overwrite: false,
