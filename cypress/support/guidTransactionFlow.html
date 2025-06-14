@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transaction Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      .center {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+      }
+      .spinner-border {
+        display: none;
+      }
+      #guid,
+      #confirmation,
+      #guidText {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #4682B4; /* Steel Blue color */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container center">
+      <button id="startButton" class="btn btn-primary">Start Transaction</button>
+      <div id="spinner" class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div id="guidText" class="mt-3" style="display: none">The following transaction ID will be processed...</div>
+      <div id="guid" class="mt-3" style="display: none"></div>
+      <button id="processButton" class="btn btn-success mt-3" style="display: none">Process Transaction</button>
+      <div id="confirmation" class="mt-3" style="display: none"></div>
+    </div>
+
+    <script>
+      document.getElementById("startButton").addEventListener("click", function () {
+        document.getElementById("startButton").style.display = "none";
+        document.getElementById("spinner").style.display = "block";
+
+        setTimeout(function () {
+          document.getElementById("spinner").style.display = "none";
+          const guid = generateGUID();
+          document.getElementById("guidText").style.display = "block";
+          document.getElementById("guid").innerText = guid;
+          document.getElementById("guid").style.display = "block";
+          document.getElementById("processButton").style.display = "block";
+        }, 5000);
+      });
+
+      document.getElementById("processButton").addEventListener("click", function () {
+        document.getElementById("guidText").style.display = "none";
+        document.getElementById("guid").style.display = "none";
+        document.getElementById("processButton").style.display = "none";
+        document.getElementById("spinner").style.display = "block";
+
+        setTimeout(function () {
+          document.getElementById("spinner").style.display = "none";
+          const guid = document.getElementById("guid").innerText;
+          document.getElementById("confirmation").innerText = "Successfully processed the given transaction ID: " + guid;
+          document.getElementById("confirmation").style.display = "block";
+        }, 3000);
+      });
+
+      function generateGUID() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+          const r = (Math.random() * 16) | 0,
+            v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+    </script>
+  </body>
+</html>

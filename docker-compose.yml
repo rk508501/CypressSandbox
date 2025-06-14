@@ -1,0 +1,62 @@
+version: '3.8'
+services:
+  cypress_batch_1:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/1_getting_started/todo.cy.js,cypress/e2e/2_advanced_examples/actions.cy.js,cypress/e2e/2_advanced_examples/aliasing.cy.js"
+  cypress_batch_2:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/2_advanced_examples/assertions.cy.js,cypress/e2e/2_advanced_examples/connectors.cy.js,cypress/e2e/2_advanced_examples/cookies.cy.js"
+  cypress_batch_3:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/2_advanced_examples/cypress_api.cy.js,cypress/e2e/2_advanced_examples/files.cy.js,cypress/e2e/2_advanced_examples/location.cy.js"
+  cypress_batch_4:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/2_advanced_examples/misc.cy.js,cypress/e2e/2_advanced_examples/navigation.cy.js"
+  cypress_batch_5:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/2_advanced_examples/network_requests.cy.js,cypress/e2e/2_advanced_examples/querying.cy.js"
+  cypress_batch_6:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/2_advanced_examples/spies_stubs_clocks.cy.js,cypress/e2e/2_advanced_examples/storage.cy.js"
+  cypress_batch_7:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/2_advanced_examples/traversal.cy.js,cypress/e2e/2_advanced_examples/utilities.cy.js"
+  cypress_batch_8:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/2_advanced_examples/viewport.cy.js,cypress/e2e/2_advanced_examples/waiting.cy.js"
+  cypress_batch_9:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/2_advanced_examples/window.cy.js,cypress/e2e/SauceDemo.cy.js"
+  cypress_batch_10:
+    image: cypress-docker-image
+    volumes:
+      - .:/e2e
+    working_dir: /e2e
+    command: npx cypress run --spec "cypress/e2e/SearchBooks.cy.js,cypress/e2e/transaction.cy.js"
