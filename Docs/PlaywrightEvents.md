@@ -101,3 +101,165 @@ const newContext = await browser.newContext({ storageState: 'auth.json' });
 const newPage = await newContext.newPage();
 await newPage.goto('https://example.com/protected'); // Already logged in
 ```
+
+## 8. Locator Strategies
+```javascript
+// Text content
+await page.locator('text=Submit').click();
+await page.locator(':text("Submit")').click();
+await page.getByText('Submit').click();
+
+// Role
+await page.getByRole('button').click();
+await page.getByRole('button', { name: 'Submit' }).click();
+
+// Test ID
+await page.getByTestId('submit-button').click();
+
+// Placeholder
+await page.getByPlaceholder('Enter your name').fill('John');
+
+// Label
+await page.getByLabel('Password').fill('secret');
+
+// CSS selectors
+await page.locator('#id').click();
+await page.locator('.class').click();
+await page.locator('[data-test="submit"]').click();
+
+// XPath
+await page.locator('xpath=//button[contains(text(), "Submit")]').click();
+```
+
+## 9. Dropdown Operations
+```javascript
+// Select by value
+await page.selectOption('select#dropdown', 'value1');
+
+// Select by label
+await page.selectOption('select#dropdown', { label: 'Option 1' });
+
+// Select by index
+await page.selectOption('select#dropdown', { index: 1 });
+
+// Multiple select
+await page.selectOption('select#multiple', ['value1', 'value2']);
+
+// Get selected options
+const selectedValues = await page.locator('select#dropdown').evaluate((el) => {
+  return Array.from(el.selectedOptions).map(option => option.value);
+});
+
+const selectedText = await page.locator('select#dropdown').evaluate((el) => {
+  return Array.from(el.selectedOptions).map(option => option.text);
+});
+```
+
+## 10. Scrolling Operations
+```javascript
+// Scroll element into view
+await page.locator('.element').scrollIntoViewIfNeeded();
+
+// Scroll to bottom of page
+await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+// Scroll to top of page
+await page.evaluate(() => window.scrollTo(0, 0));
+
+// Scroll by coordinates
+await page.evaluate(() => window.scrollBy(0, 100)); // Scroll down 100px
+await page.evaluate(() => window.scrollBy(-100, 0)); // Scroll left 100px
+
+// Auto-scroll element
+await page.locator('.scrollable-element').evaluate(el => {
+  el.scrollTop = el.scrollHeight;
+});
+```
+
+## 11. Navigation Commands
+```javascript
+// Navigate to URL
+await page.goto('https://example.com');
+
+// Refresh page
+await page.reload();
+
+// Go back
+await page.goBack();
+
+// Go forward
+await page.goForward();
+
+// Wait for navigation after action
+await Promise.all([
+  page.waitForNavigation(),
+  page.click('a.nav-link')
+]);
+```
+
+## 12. iFrame Handling
+```javascript
+// Get iframe
+const frame = page.frameLocator('#iframe-id');
+
+// Interact with elements inside iframe
+await frame.locator('.button-in-iframe').click();
+await frame.locator('#input-in-iframe').fill('text');
+
+// Wait for iframe to load
+await frame.locator('body').waitFor();
+
+// Get frame by URL
+const frameByUrl = page.frameLocator('iframe[src="/iframe-page"]');
+
+// Switch to frame and perform actions
+await frameByUrl.locator('#element-in-frame').click();
+```
+
+## 13. Advanced Waiting Strategies
+```javascript
+// Wait for element
+await page.locator('.element').waitFor();
+
+// Wait for element to be visible
+await page.locator('.element').waitFor({ state: 'visible' });
+
+// Wait for element to be hidden
+await page.locator('.element').waitFor({ state: 'hidden' });
+
+// Wait for network idle
+await page.waitForLoadState('networkidle');
+
+// Wait for specific response
+await page.waitForResponse(response => 
+  response.url().includes('/api/data') && response.status() === 200
+);
+
+// Custom timeout
+await page.locator('.element').waitFor({ timeout: 10000 }); // 10 seconds
+```
+
+## 14. Keyboard and Mouse Actions
+```javascript
+// Press single key
+await page.keyboard.press('Enter');
+
+// Key combinations
+await page.keyboard.press('Control+A');
+await page.keyboard.press('Control+C');
+
+// Type text
+await page.keyboard.type('Hello World');
+
+// Mouse hover
+await page.hover('.element');
+
+// Double click
+await page.dblclick('.element');
+
+// Right click
+await page.click('.element', { button: 'right' });
+
+// Drag and drop
+await page.dragAndDrop('#source', '#target');
+```
