@@ -8,6 +8,8 @@ it("Verify if the Apple is present", () => {
         let appleEle = items.find(item =>{
             return item.innerText.trim() == "Apple"
         })
+
+      
         cy.log(appleEle.innerText)
     })
 });
